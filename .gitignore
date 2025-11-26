@@ -1,0 +1,8 @@
+# Vistual Studio Code
+.vscode
+
+# VENV
+.venv
+
+# ENV
+**/.env
