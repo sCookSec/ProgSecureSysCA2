@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CA2 | Add Message</title>
+</head>
+<body>
+    <div>
+        <a href="/">Home</a> | <a href="/addmessage">Add Message</a> | <span id="user-info"></span> <a href="/logout">Logout</a>
+    </div>
+
+    <h1>Add Message</h1>
+
+    <span id="error-info"></span>
+
+    <form action="/addmessage" method="POST" enctype="text/plain">
+        <input type="text" name="title" placeholder="Title" required/>
+        <br />
+        <textarea name="message" placeholder="Message" rows="10" cols="30" required></textarea>
+        <br />
+        <br />
+        <button type="submit">Add message</button>
+    </form>
+</body>
+</html>

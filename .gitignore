@@ -6,3 +6,12 @@
 
 # ENV
 **/.env
+
+# Python
+**/__pycache__
+
+# Database
+**/noticeboard.db*
+
+# Logs
+**/*.log
