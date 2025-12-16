@@ -1,6 +1,7 @@
 import datetime
 from utils import get_route_function_name, send_response, get_post_data, get_cookies, on_not_login_redirect, has_error
 import database
+import html
 
 # Routes handle
 def handle_request(method, request):
@@ -46,13 +47,19 @@ def get_index(request):
 
     messages_html = '<div>'
     for message in messages:
+        title_safe = html.escape(message[1] or '')
+        text_safe = html.escape(message[2] or '')
+        author_safe = html.escape(message[5] or '')
+        phone_safe = html.escape(message[6] or '')
+        date_safe = html.escape(message[3] or '')
+
         messages_html += f"""
             <div>
-                <h2>{message[1]}</h2>
+                <h2>{title_safe}</h2>
                 
-                <p>{message[2]}</p>
+                <p>{text_safe}</p>
 
-                <i>By {message[5]} ({message[6]}) at {message[3]}</i>
+                <i>By {author_safe} ({phone_safe}) at {date_safe}</i>
             </div>
 
             <hr />
