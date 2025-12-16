@@ -41,6 +41,7 @@ def init_database():
     cur.execute("DELETE FROM messages")
     cur.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='messages'")
 
+    con.commit()
 
 # Queries
 
@@ -48,6 +49,7 @@ def insert(query, params):
     try:
         cur = con.cursor()
         res = cur.execute(query, params)
+        con.commit()
         return res.lastrowid
     except Exception as error:
         print(error)
