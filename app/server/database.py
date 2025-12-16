@@ -44,29 +44,29 @@ def init_database():
 
 # Queries
 
-def insert(query):
+def insert(query, params):
     try:
         cur = con.cursor()
-        res = cur.execute(query)
+        res = cur.execute(query, params)
         return res.lastrowid
     except Exception as error:
         print(error)
         return None
 
-def selectOne(query):
+def selectOne(query, params):
     try:
         cur = con.cursor()
-        res = cur.execute(query)
+        res = cur.execute(query, params)
         row = res.fetchone()
         return row
     except Exception as error:
         print(error)
         return None
 
-def selectAll(query):
+def selectAll(query, params):
     try:
         cur = con.cursor()
-        res = cur.execute(query)
+        res = cur.execute(query, params)
         rows = res.fetchall()
         return rows
     except Exception as error:
@@ -75,23 +75,27 @@ def selectAll(query):
 
 # Auth
 def add_user(name, phone, username, password):
-    query = f"INSERT INTO users VALUES (NULL, '{name}', '{phone}', '{username}', '{password}', 'user')"
-    id = insert(query)
+    query = f"INSERT INTO users VALUES (NULL, ?, ?, ?, ?, 'user')"
+    params = (name, phone, username, password)
+    id = insert(query, params)
     return id
     
 def login(username, password):
-    query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-    user = selectOne(query)
+    query = f"SELECT * FROM users WHERE username = ? AND password = ?"
+    params = (username, password)
+    user = selectOne(query, params)
     return user
 
 # Messages
 def get_messages():
     query = f"SELECT * FROM messages LEFT OUTER JOIN users USING(user_id) ORDER BY date DESC"
-    messages = selectAll(query)
+    params = ()
+    messages = selectAll(query, params)
     return messages
 
 def add_message(title, message, user_id):
-    query = f"INSERT INTO messages VALUES (NULL, '{title}', '{message}', datetime('now'), '{user_id}')"
-    id = insert(query)
+    query = f"INSERT INTO messages VALUES (NULL, ?, ?, datetime('now'), ?)"
+    params = (title, message, user_id)
+    id = insert(query, params)
     return id
 
