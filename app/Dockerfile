@@ -5,7 +5,7 @@ FROM debian:13-slim
 RUN apt update && apt upgrade -y
 
 # Install Python
-RUN apt update && apt install -y python-is-python3
+RUN apt update && apt install -y python3 python3-pip python-is-python3
 
 # Install SQLite
 RUN apt update && apt install -y sqlite3
@@ -15,6 +15,9 @@ COPY server /root/server
 
 # Set the working directory
 WORKDIR /root/server
+
+# Install Python Dependences
+RUN pip3 install --break-system-packages -r requirements.txt
 
 # Run the server Python script
 CMD ["python", "server.py"]

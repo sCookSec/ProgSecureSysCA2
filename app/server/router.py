@@ -47,10 +47,14 @@ def get_index(request):
 
     messages_html = '<div>'
     for message in messages:
+        # Decrypt protected information
+        phone_decrypted = database.fernet.decrypt(message[6].encode()).decode()
+
+        # Escape data
         title_safe = html.escape(message[1] or '')
         text_safe = html.escape(message[2] or '')
         author_safe = html.escape(message[5] or '')
-        phone_safe = html.escape(message[6] or '')
+        phone_safe = html.escape(phone_decrypted or '')
         date_safe = html.escape(message[3] or '')
 
         messages_html += f"""
