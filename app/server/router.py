@@ -1,7 +1,8 @@
 import datetime
-from utils import get_route_function_name, send_response, get_post_data, get_cookies, on_not_login_redirect, has_error
+from utils import get_route_function_name, send_response, get_post_data, get_cookies, on_not_login_redirect, has_error, validate_registration
 import database
 import html
+import urllib.parse
 
 # Routes handle
 def handle_request(method, request):
@@ -138,7 +139,8 @@ def get_register(request):
     template_content = open('templates/register.html').read()
 
     if has_error(request):
-        error_info = "<p>The user could not be added</p>"
+        reason = request.path.split("?error=")[1]
+        error_info = f"<p>{urllib.parse.unquote(reason)}</p>"
         template_content = template_content.replace('<span id="error-info"></span>', error_info)
 
     status = 200
@@ -149,6 +151,17 @@ def get_register(request):
 # POST /register
 def post_register(request):
     data = get_post_data(request)
+
+    # Validate form info server-side
+    valid, reason = validate_registration(data['name'], data['phone'], data['username'], data['password'])
+    if not valid:
+        status = 303
+        headers = [
+            {'name': 'Location', 'value': f'/register?error={urllib.parse.quote(reason)}'}
+        ]
+        content = ""
+        send_response(request, status, headers, content)
+        return
 
     id = database.add_user(data['name'], data['phone'], data['username'], data['password'])
 

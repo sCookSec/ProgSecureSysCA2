@@ -1,3 +1,5 @@
+import re
+
 def get_route_function_name(method, path):
     # Get router path
     router_path_name = path[1:].split('?')[0].replace('/', '_')
@@ -66,3 +68,18 @@ def has_error(request):
         return True
     else:
         return False
+
+# Validator expresions
+USERNAME_RE = re.compile(r'^[A-Za-z0-9_]{3,20}$')
+PHONE_RE = re.compile(r'^\+\d{7,15}$')
+
+def validate_registration(name, phone, username, password):
+    if not name:
+        return False, "Name is required"
+    if not USERNAME_RE.fullmatch(username):
+        return False, "Username invalid (3-20 chars: letters, digits, underscore)"
+    if not PHONE_RE.fullmatch(phone):
+        return False, "Phone invalid (+ and 7-15 digits)"
+    if not password or len(password) < 8:
+        return False, "Password too short (min 8 chars)"
+    return True, ""
